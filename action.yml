@@ -19,7 +19,7 @@ outputs:
     description: 'The version of the project'
 runs:
   using: 'docker'
-  image: 'Dockerfile'
+  image: 'docker.pkg.github.com/zehnm/yio-crosscompile-action/yio-crosscompile:latest'
   args:
     - ${{ inputs.project-name }}
     - ${{ inputs.output-path }}
