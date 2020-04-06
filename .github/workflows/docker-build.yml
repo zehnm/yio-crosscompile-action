@@ -12,6 +12,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: Build, Tag, Push
       run: |
-        docker login docker.pkg.github.com -u $GITHUB_ACTOR -p ${{ secrets.GITHUB_TOKEN }}
+        echo "Github username: ${GITHUB_ACTOR}"
+        docker login docker.pkg.github.com -u ${GITHUB_ACTOR} -p ${{ secrets.GITHUB_TOKEN }}
         docker build --pull -t yio-crosscompile -f Dockerfile .
         docker push yio-crosscompile
