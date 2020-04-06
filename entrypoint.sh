@@ -34,8 +34,6 @@ else
         echo "WARNING: dependency file not found: $DEPENDENCY_FILE! Using default version: $YIO_INTG_LIB_VERSION"
     fi
 
-    echo "Dependency 'integrations.library' missing in GITHUB_WORKSPACE: checking out version: $YIO_INTG_LIB_VERSION"
-
     cd ${GITHUB_WORKSPACE}
     git clone --depth 1 https://github.com/YIO-Remote/integrations.library.git -b $YIO_INTG_LIB_VERSION
 fi
