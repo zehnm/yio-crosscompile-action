@@ -14,5 +14,5 @@ jobs:
       run: |
         echo "Github username: ${GITHUB_ACTOR}"
         docker login docker.pkg.github.com -u ${GITHUB_ACTOR} -p ${{ secrets.GITHUB_TOKEN }}
-        docker build --pull -t yio-crosscompile -f Dockerfile .
-        docker push yio-crosscompile
+        docker build --pull -t docker.pkg.github.com/zehnm/yio-crosscompile-action/yio-crosscompile:latest -f Dockerfile .
+        docker push docker.pkg.github.com/zehnm/yio-crosscompile-action/yio-crosscompile:latest
