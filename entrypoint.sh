@@ -13,7 +13,9 @@ echo "QMake args  : $YIO_REMOTE_QMAKE_ARGS"
 echo "Github workspace: ${GITHUB_WORKSPACE}"
 echo "Shadow build dir: ${SHADOW_BUILD_DIR}"
 
+rm -rf $YIO_BIN || :
 mkdir -p $YIO_BIN
+rm -rf $SHADOW_BUILD_DIR || :
 mkdir -p $SHADOW_BUILD_DIR
 
 time=$(date)
