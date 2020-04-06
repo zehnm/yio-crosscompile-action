@@ -1,0 +1,27 @@
+# action.yml
+name: 'YIO remote cross compile RPi0'
+description: 'Cross compile a YIO remote project for the Raspberry Pi Zero'
+inputs:
+  project-name:
+    description: 'Name of the Qt project folder'
+    required: true
+    default: 'remote-software'
+  output-path:
+    description: 'Output directory for binary artefacts'
+    required: true
+    default: '${GITHUB_WORKSPACE}/binaries/app'
+  qmake-args:
+    description: 'QMake build arguments'
+    required: true
+    default: 'CONFIG+=debug CONFIG+=qml_debug'
+outputs:
+  project-version: # id of output
+    description: 'The version of the project'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.project-name }}
+    - ${{ inputs.output-path }}
+    - ${{ inputs.qmake-args }}
+    

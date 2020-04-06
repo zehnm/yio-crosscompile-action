@@ -1,0 +1,70 @@
+#!/bin/sh -l
+
+set -e
+
+echo "Project name: $1"
+echo "Output path : $2"
+echo "QMake args  : $3"
+echo "Github workspace: ${GITHUB_WORKSPACE}"
+
+PROJECT_NAME=$1
+export YIO_BIN=$2
+YIO_REMOTE_QMAKE_ARGS=$3
+SHADOW_BUILD_DIR=${GITHUB_WORKSPACE}/${PROJECT_NAME}/build_rpi0
+
+mkdir -p $YIO_BIN
+mkdir -p $SHADOW_BUILD_DIR
+
+time=$(date)
+
+echo "Creating Makefile..."
+cd $SHADOW_BUILD_DIR
+export PATH=${TOOLCHAIN_PATH}/bin:${TOOLCHAIN_PATH}/sbin:$PATH
+${TOOLCHAIN_PATH}/bin/qmake ${GITHUB_WORKSPACE}/${PROJECT_NAME} ${YIO_REMOTE_QMAKE_ARGS}
+
+echo "new PATH: $PATH"
+
+make qmake_all
+
+# build app
+cd $SHADOW_BUILD_DIR
+CPU_CORES=$(getconf _NPROCESSORS_ONLN)
+echo "Numbers of CPU cores for make: $CPU_CORES"
+make -j$CPU_CORES
+# log build information
+echo "GitHub Actions debug build
+$(date)
+GIT branch: $(git rev-parse --abbrev-ref HEAD)
+GIT hash:   $(git rev-parse HEAD)
+YIO Buildroot SDK: $BUILDROOT_SDK_VERSION
+
+$(${TOOLCHAIN_PATH}/bin/qmake -query)
+
+$(make --version)
+
+$(cc --version)
+$(gcc --version)
+$(cpp --version)
+" > ${YIO_BIN}/../build.info
+
+echo "Getting app version"
+cd $SHADOW_BUILD_DIR
+read -r APP_VERSION<version.txt
+echo "App version: $APP_VERSION"
+echo "::set-output name=project-version::$APP_VERSION"
+
+echo "Creating debug installation package from: ${YIO_BIN}"
+
+# copy additional files for the installation archive
+cp $SHADOW_BUILD_DIR/version.txt ${YIO_BIN}/..
+# hooks are optional: don't fail if missing
+cp -r $SHADOW_BUILD_DIR/hooks ${YIO_BIN}/.. || :
+# compress app
+cd ${YIO_BIN}/..
+rm -f app.tar.gz md5sums
+tar -czvf app.tar.gz app
+rm -Rf app
+# create checksums
+md5sum * > md5sums
+
+ls -la
