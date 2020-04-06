@@ -6,7 +6,7 @@ GitHub action for cross compiling a YIO remote project for RPi0
 
 ### project-name
 
-The name of the Qt project to build. This is the folder name of the Git checkout within `${GITHUB_WORKSPACE}`.
+The name of the Qt project to build. This must be a folder name of a YIO project git checkout within `${GITHUB_WORKSPACE}`!
 
 ### output-path
 

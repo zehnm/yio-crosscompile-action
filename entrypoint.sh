@@ -7,25 +7,39 @@ export YIO_BIN=$( eval echo $2 )
 YIO_REMOTE_QMAKE_ARGS=$( eval echo $3 )
 SHADOW_BUILD_DIR=${GITHUB_WORKSPACE}/${PROJECT_NAME}/build_rpi0
 
-echo "Project name: $PROJECT_NAME"
-echo "Output path : $YIO_BIN"
-echo "QMake args  : $YIO_REMOTE_QMAKE_ARGS"
-echo "Github workspace: ${GITHUB_WORKSPACE}"
-echo "Shadow build dir: ${SHADOW_BUILD_DIR}"
+echo "Project dir in workspace: $PROJECT_NAME"
+echo "Output path             : $YIO_BIN"
+echo "QMake args              : $YIO_REMOTE_QMAKE_ARGS"
+echo "Github workspace        : ${GITHUB_WORKSPACE}"
+echo "Shadow build dir        : ${SHADOW_BUILD_DIR}"
 
+# verify environment
+if [ ! -d "${GITHUB_WORKSPACE}/${PROJECT_NAME}" ]; then
+    echo "Project directory '$PROJECT_NAME' does not exist in workspace '$GITHUB_WORKSPACE'!"
+fi
+
+# retrieve missing dependencies
+if [ -d "${GITHUB_WORKSPACE}/integrations.library" ]; then
+    echo "Dependency 'integrations.library' found in GITHUB_WORKSPACE"
+else
+    # TODO retrieve dependency from project
+    YIO_INTG_LIB_VERSION=develop
+    echo "Dependency 'integrations.library' missing in GITHUB_WORKSPACE: checking out version: $YIO_INTG_LIB_VERSION"
+
+    cd ${GITHUB_WORKSPACE}
+    git clone https://github.com/YIO-Remote/integrations.library.git -b $YIO_INTG_LIB_VERSION
+fi
+
+# make sure there are no old build artefacts and all output directories exist
 rm -rf $YIO_BIN || :
 mkdir -p $YIO_BIN
 rm -rf $SHADOW_BUILD_DIR || :
 mkdir -p $SHADOW_BUILD_DIR
 
-time=$(date)
-
 echo "Creating Makefile..."
 cd $SHADOW_BUILD_DIR
 export PATH=${TOOLCHAIN_PATH}/bin:${TOOLCHAIN_PATH}/sbin:$PATH
 ${TOOLCHAIN_PATH}/bin/qmake ${GITHUB_WORKSPACE}/${PROJECT_NAME} ${YIO_REMOTE_QMAKE_ARGS}
-
-echo "new PATH: $PATH"
 
 make qmake_all
 
@@ -69,5 +83,3 @@ tar -czvf app.tar.gz app
 rm -Rf app
 # create checksums
 md5sum * > md5sums
-
-ls -la

@@ -3,7 +3,7 @@ name: 'YIO remote cross compile RPi0'
 description: 'Cross compile a YIO remote project for the Raspberry Pi Zero'
 inputs:
   project-name:
-    description: 'Name of the Qt project folder'
+    description: 'Name of the Qt project folder inside $GITHUB_WORKSPACE'
     required: true
     default: 'remote-software'
   output-path:
