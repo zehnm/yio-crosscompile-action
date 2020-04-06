@@ -6,6 +6,7 @@ PROJECT_NAME=$( eval echo $1 )
 export YIO_BIN=$( eval echo $2 )
 YIO_REMOTE_QMAKE_ARGS=$( eval echo $3 )
 SHADOW_BUILD_DIR=${GITHUB_WORKSPACE}/${PROJECT_NAME}/build_rpi0
+export YIO_SRC=${GITHUB_WORKSPACE}
 
 echo "Project dir in workspace: $PROJECT_NAME"
 echo "Output path             : $YIO_BIN"
@@ -22,12 +23,21 @@ fi
 if [ -d "${GITHUB_WORKSPACE}/integrations.library" ]; then
     echo "Dependency 'integrations.library' found in GITHUB_WORKSPACE"
 else
-    # TODO retrieve dependency from project
+    echo "Dependency 'integrations.library' missing in GITHUB_WORKSPACE"
     YIO_INTG_LIB_VERSION=develop
+
+    DEPENDENCY_FILE=${GITHUB_WORKSPACE}/${PROJECT_NAME}/dependencies.txt
+    if [ -r $DEPENDENCY_FILE ]; then
+        YIO_INTG_LIB_VERSION=$(cat "$DEPENDENCY_FILE" | awk '/^integrations.library/{print $3}')
+        echo "Retrieved 'integrations.library' version from $DEPENDENCY_FILE: $YIO_INTG_LIB_VERSION"
+    else
+        echo "WARNING: dependency file not found: $DEPENDENCY_FILE! Using default version: $YIO_INTG_LIB_VERSION"
+    fi
+
     echo "Dependency 'integrations.library' missing in GITHUB_WORKSPACE: checking out version: $YIO_INTG_LIB_VERSION"
 
     cd ${GITHUB_WORKSPACE}
-    git clone https://github.com/YIO-Remote/integrations.library.git -b $YIO_INTG_LIB_VERSION
+    git clone --depth 1 https://github.com/YIO-Remote/integrations.library.git -b $YIO_INTG_LIB_VERSION
 fi
 
 # make sure there are no old build artefacts and all output directories exist
