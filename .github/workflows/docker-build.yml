@@ -1,0 +1,17 @@
+name: Docker Image Build
+
+on: [push]
+
+# TODO handle releases
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Docker Build, Tag, Push
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build, Tag, Push
+      run: |
+        docker login docker.pkg.github.com -u ${{ env.GITHUB_ACTOR }} -p ${{ secrets.GITHUB_TOKEN }}
+        docker build --pull -t yio-crosscompile -f Dockerfile .
+        docker push yio-crosscompile
