@@ -2,15 +2,16 @@
 
 set -e
 
-echo "Project name: $1"
-echo "Output path : $2"
-echo "QMake args  : $3"
-echo "Github workspace: ${GITHUB_WORKSPACE}"
-
-PROJECT_NAME=$1
-export YIO_BIN=$2
-YIO_REMOTE_QMAKE_ARGS=$3
+PROJECT_NAME=$( eval echo $1 )
+export YIO_BIN=$( eval echo $2 )
+YIO_REMOTE_QMAKE_ARGS=$( eval echo $3 )
 SHADOW_BUILD_DIR=${GITHUB_WORKSPACE}/${PROJECT_NAME}/build_rpi0
+
+echo "Project name: $PROJECT_NAME"
+echo "Output path : $YIO_BIN"
+echo "QMake args  : $YIO_REMOTE_QMAKE_ARGS"
+echo "Github workspace: ${GITHUB_WORKSPACE}"
+echo "Shadow build dir: ${SHADOW_BUILD_DIR}"
 
 mkdir -p $YIO_BIN
 mkdir -p $SHADOW_BUILD_DIR
