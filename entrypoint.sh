@@ -5,14 +5,16 @@ set -e
 PROJECT_NAME=$( eval echo $1 )
 export YIO_BIN=$( eval echo $2 )
 YIO_REMOTE_QMAKE_ARGS=$( eval echo $3 )
+INTG_LIB_REPO=$4
 SHADOW_BUILD_DIR=${GITHUB_WORKSPACE}/${PROJECT_NAME}/build_rpi0
 export YIO_SRC=${GITHUB_WORKSPACE}
 
-echo "Project dir in workspace: $PROJECT_NAME"
-echo "Output path             : $YIO_BIN"
-echo "QMake args              : $YIO_REMOTE_QMAKE_ARGS"
-echo "Github workspace        : ${GITHUB_WORKSPACE}"
-echo "Shadow build dir        : ${SHADOW_BUILD_DIR}"
+echo "Project dir in workspace : $PROJECT_NAME"
+echo "Output path              : $YIO_BIN"
+echo "QMake args               : $YIO_REMOTE_QMAKE_ARGS"
+echo "Github workspace         : ${GITHUB_WORKSPACE}"
+echo "Shadow build dir         : ${SHADOW_BUILD_DIR}"
+echo "integrations.library repo: $INTG_LIB_REPO"
 
 # verify environment
 if [ ! -d "${GITHUB_WORKSPACE}/${PROJECT_NAME}" ]; then
@@ -35,7 +37,7 @@ else
     fi
 
     cd ${GITHUB_WORKSPACE}
-    git clone --depth 1 https://github.com/YIO-Remote/integrations.library.git -b $YIO_INTG_LIB_VERSION
+    git clone --depth 1 $INTG_LIB_REPO -b $YIO_INTG_LIB_VERSION
 fi
 
 # make sure there are no old build artefacts and all output directories exist

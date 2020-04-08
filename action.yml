@@ -14,6 +14,9 @@ inputs:
     description: 'QMake build arguments'
     required: true
     default: 'CONFIG+=debug CONFIG+=qml_debug'
+  intg-lib-repo:
+    description: 'integrations.library Git repository'
+    default: 'https://github.com/YIO-Remote/integrations.library.git'
 outputs:
   project-version: # id of output
     description: 'The version of the project'
@@ -29,4 +32,5 @@ runs:
     - ${{ inputs.project-name }}
     - ${{ inputs.output-path }}
     - ${{ inputs.qmake-args }}
+    - ${{ inputs.intg-lib-repo }}
     
