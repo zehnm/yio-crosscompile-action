@@ -24,7 +24,7 @@ if [ -d "${GITHUB_WORKSPACE}/integrations.library" ]; then
     echo "Dependency 'integrations.library' found in GITHUB_WORKSPACE"
 else
     echo "Dependency 'integrations.library' missing in GITHUB_WORKSPACE"
-    YIO_INTG_LIB_VERSION=develop
+    YIO_INTG_LIB_VERSION=master
 
     DEPENDENCY_FILE=${GITHUB_WORKSPACE}/${PROJECT_NAME}/dependencies.cfg
     if [ -r $DEPENDENCY_FILE ]; then
