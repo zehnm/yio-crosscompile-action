@@ -26,7 +26,7 @@ else
     echo "Dependency 'integrations.library' missing in GITHUB_WORKSPACE"
     YIO_INTG_LIB_VERSION=develop
 
-    DEPENDENCY_FILE=${GITHUB_WORKSPACE}/${PROJECT_NAME}/dependencies.txt
+    DEPENDENCY_FILE=${GITHUB_WORKSPACE}/${PROJECT_NAME}/dependencies.cfg
     if [ -r $DEPENDENCY_FILE ]; then
         YIO_INTG_LIB_VERSION=$(cat "$DEPENDENCY_FILE" | awk '/^integrations.library/{print $3}')
         echo "Retrieved 'integrations.library' version from $DEPENDENCY_FILE: $YIO_INTG_LIB_VERSION"
