@@ -28,7 +28,7 @@ else
 
     DEPENDENCY_FILE=${GITHUB_WORKSPACE}/${PROJECT_NAME}/dependencies.cfg
     if [ -r $DEPENDENCY_FILE ]; then
-        YIO_INTG_LIB_VERSION=$(cat "$DEPENDENCY_FILE" | awk '/^integrations.library/{print $3}')
+        YIO_INTG_LIB_VERSION=$(cat "$DEPENDENCY_FILE" | awk '/^integrations.library:/{print $2}')
         echo "Retrieved 'integrations.library' version from $DEPENDENCY_FILE: $YIO_INTG_LIB_VERSION"
     else
         echo "WARNING: dependency file not found: $DEPENDENCY_FILE! Using default version: $YIO_INTG_LIB_VERSION"
