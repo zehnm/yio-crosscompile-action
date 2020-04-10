@@ -1,5 +1,17 @@
 FROM ubuntu:19.10
 
+ARG BUILD_DATE
+ARG VERSION
+ARG BUILD_REVISION
+LABEL org.opencontainers.image.created=$BUILD_DATE
+LABEL org.opencontainers.image.authors="business@markuszehnder.ch"
+LABEL org.opencontainers.image.url="https://github.com/zehnm/yio-crosscompile-action"
+LABEL org.opencontainers.image.source="https://github.com/zehnm/yio-crosscompile-action.git"
+LABEL org.opencontainers.image.version=$VERSION
+LABEL org.opencontainers.image.revision=$BUILD_REVISION
+LABEL org.opencontainers.image.title="YIO remote cross compile GitHub Action"
+LABEL org.opencontainers.image.description="GitHub action for cross compiling a YIO remote project for RPi0"
+
 ENV BUILDROOT_SDK_VERSION=v0.2.0  
 ENV BUILDROOT_SDK_BASE_URL=https://github.com/YIO-Remote/remote-os/releases/download
 ENV BUILDROOT_SDK_NAME=arm-buildroot-linux-gnueabihf_sdk-buildroot

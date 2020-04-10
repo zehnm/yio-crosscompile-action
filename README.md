@@ -14,7 +14,13 @@ The output directory path for the binary build artefacts. This directory must be
 
 ### qmake-args
 
-The QMake build arguments.
+The QMake build arguments. E.g. to specify a debug or release build. Default: `CONFIG+=debug CONFIG+=qml_debug`.
+
+### intg-lib-repo
+
+The git repository for checking out the integrations.library project. Default: `https://github.com/YIO-Remote/integrations.library.git`.
+
+If `${GITHUB_WORKSPACE}/integrations.library` doesn't exist it will automatically be checked out.
 
 ## Outputs
 
@@ -28,4 +34,4 @@ The retrieved project version from the git project.
     with:
       project-name: remote-software
       output-path: ${GITHUB_WORKSPACE}/binaries/app
-      qmake-args: 'CONFIG+=debug CONFIG+=qml_debug'
+      qmake-args: 'CONFIG+=release'
