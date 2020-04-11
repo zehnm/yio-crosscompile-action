@@ -1,9 +1,6 @@
 #!/bin/bash
 # DockerHub build hook: https://docs.docker.com/docker-hub/builds/advanced/
 
-# get full history for `git describe` to work
-git fetch --unshallow origin
-
 docker build --pull --build-arg BUILD_DATE=`date +%FT%TZ` \
     --build-arg VERSION=`git describe --match "v[0-9]*" --tags HEAD --always` \
     --build-arg BUILD_REVISION=$SOURCE_COMMIT \
