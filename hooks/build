@@ -1,6 +1,10 @@
 #!/bin/bash
+# DockerHub build hook: https://docs.docker.com/docker-hub/builds/advanced/
 
-docker build --build-arg BUILD_DATE=`date +%FT%TZ` \
-    --build-arg VERSION=`git describe --match "v[0-9]*" --tags HEAD --always)` \
+# get full history for `git describe` to work
+git fetch --unshallow origin
+
+docker build --pull --build-arg BUILD_DATE=`date +%FT%TZ` \
+    --build-arg VERSION=`git describe --match "v[0-9]*" --tags HEAD --always` \
     --build-arg BUILD_REVISION=$SOURCE_COMMIT \
     -f $DOCKERFILE_PATH -t $IMAGE_NAME .

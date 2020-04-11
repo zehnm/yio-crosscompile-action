@@ -30,8 +30,44 @@ The retrieved project version from the git project.
 
 ## Example usage
 
-    uses: zehnm/yio-crosscompile-action@master
-    with:
-      project-name: remote-software
-      output-path: ${GITHUB_WORKSPACE}/binaries/app
-      qmake-args: 'CONFIG+=release'
+```
+name: Cross Compile
+on: [push]
+env:
+  PROJECT_NAME: remote-software
+
+jobs:
+  cross_compile:
+    name: RPi0 YIO remote-os
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout remote-software with history
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 500
+          path: ${{ env.PROJECT_NAME}}
+
+      - name: Fetch all tags to determine version
+        run: |
+          cd ${{ env.PROJECT_NAME}}
+          git fetch origin +refs/tags/*:refs/tags/*
+          git describe --match "v[0-9]*" --tags HEAD --always
+
+      - name: Cross compile
+        id: cross-compile
+        uses: zehnm/yio-crosscompile-action@master
+        with:
+          project-name: ${{ env.PROJECT_NAME}}
+          output-path: ${GITHUB_WORKSPACE}/binaries/app
+          qmake-args: 'CONFIG+=release'
+
+      - name: Get app version from build
+        run: |
+          echo "::set-env name=APP_VERSION::${{ steps.cross-compile.outputs.project-version }}"
+
+      - name: Upload build artefacts
+        uses: actions/upload-artifact@v1
+        with:
+          path: binaries
+          name: ${{ env.PROJECT_NAME }}-${{ env.APP_VERSION }}-rpi0
+```

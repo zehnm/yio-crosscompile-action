@@ -3,8 +3,9 @@ name: Docker Image Build
 on:
   push:
     paths:
-    - 'Dockerfile'
-    - 'entrypoint.sh'
+      - '.github/workflows/docker-build.yml'
+      - 'Dockerfile'
+      - 'entrypoint.sh'
 
 # TODO handle releases
 
@@ -14,8 +15,20 @@ jobs:
     name: Docker Build, Tag, Push
     steps:
     - uses: actions/checkout@v2
+      with:
+        # History of 500 should be more than enough to calculate commit count since last release tag.
+        fetch-depth: 500
+    - name: Fetch all tags to determine version
+      run: |
+        git fetch origin +refs/tags/*:refs/tags/*
+        git describe --match "v[0-9]*" --tags HEAD --always
     - name: Build, Tag, Push
       run: |
         docker login docker.pkg.github.com -u ${GITHUB_ACTOR} -p ${{ secrets.GITHUB_TOKEN }}
-        docker build --pull -t docker.pkg.github.com/zehnm/yio-crosscompile-action/yio-crosscompile:latest -f Dockerfile .
+        docker build --pull \
+          --build-arg BUILD_DATE=`date +%FT%TZ` \
+          --build-arg VERSION=`git describe --match "v[0-9]*" --tags HEAD --always` \
+          --build-arg BUILD_REVISION=$GITHUB_SHA \
+          -t docker.pkg.github.com/zehnm/yio-crosscompile-action/yio-crosscompile:latest \
+          -f Dockerfile .
         docker push docker.pkg.github.com/zehnm/yio-crosscompile-action/yio-crosscompile:latest

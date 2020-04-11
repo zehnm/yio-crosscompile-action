@@ -3,6 +3,7 @@ FROM ubuntu:19.10
 ARG BUILD_DATE
 ARG VERSION
 ARG BUILD_REVISION
+# https://github.com/opencontainers/image-spec/blob/master/annotations.md#pre-defined-annotation-keys
 LABEL org.opencontainers.image.created=$BUILD_DATE
 LABEL org.opencontainers.image.authors="business@markuszehnder.ch"
 LABEL org.opencontainers.image.url="https://github.com/zehnm/yio-crosscompile-action"
