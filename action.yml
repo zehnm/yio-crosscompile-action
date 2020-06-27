@@ -17,6 +17,9 @@ inputs:
   intg-lib-repo:
     description: 'integrations.library Git repository'
     default: 'https://github.com/YIO-Remote/integrations.library.git'
+  version-file-dir:
+    description: 'Location of the version.txt file'
+    default: '.'
 outputs:
   project-version: # id of output
     description: 'The version of the project'
@@ -33,4 +36,5 @@ runs:
     - ${{ inputs.output-path }}
     - ${{ inputs.qmake-args }}
     - ${{ inputs.intg-lib-repo }}
+    - ${{ inputs.version-file-dir }}
     

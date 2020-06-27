@@ -6,6 +6,7 @@ PROJECT_NAME=$( eval echo $1 )
 export YIO_BIN=$( eval echo $2 )
 YIO_REMOTE_QMAKE_ARGS=$( eval echo $3 )
 INTG_LIB_REPO=$4
+VERSION_FILE_DIR=$( eval echo $5 )
 SHADOW_BUILD_DIR=${GITHUB_WORKSPACE}/${PROJECT_NAME}/build_rpi0
 export YIO_SRC=${GITHUB_WORKSPACE}
 
@@ -15,6 +16,7 @@ echo "QMake args               : $YIO_REMOTE_QMAKE_ARGS"
 echo "Github workspace         : ${GITHUB_WORKSPACE}"
 echo "Shadow build dir         : ${SHADOW_BUILD_DIR}"
 echo "integrations.library repo: $INTG_LIB_REPO"
+echo "version.txt location     : $VERSION_FILE_DIR"
 
 # verify environment
 if [ ! -d "${GITHUB_WORKSPACE}/${PROJECT_NAME}" ]; then
@@ -76,14 +78,14 @@ $(cpp --version)
 
 echo "Getting app version"
 cd $SHADOW_BUILD_DIR
-read -r APP_VERSION<version.txt
+read -r APP_VERSION<${VERSION_FILE_DIR}/version.txt
 echo "App version: $APP_VERSION"
 echo "::set-output name=project-version::$APP_VERSION"
 
 echo "Creating debug installation package from: ${YIO_BIN}"
 
 # copy additional files for the installation archive
-cp $SHADOW_BUILD_DIR/version.txt ${YIO_BIN}/..
+cp ${VERSION_FILE_DIR}/version.txt ${YIO_BIN}/..
 # hooks are optional: don't fail if missing
 cp -r $SHADOW_BUILD_DIR/hooks ${YIO_BIN}/.. || :
 # compress app
