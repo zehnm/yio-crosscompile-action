@@ -61,7 +61,7 @@ CPU_CORES=$(getconf _NPROCESSORS_ONLN)
 echo "Numbers of CPU cores for make: $CPU_CORES"
 make -j$CPU_CORES
 # log build information
-echo "GitHub Actions debug build
+echo "GitHub Actions build
 $(date)
 GIT branch: $(git rev-parse --abbrev-ref HEAD)
 GIT hash:   $(git rev-parse HEAD)
@@ -82,10 +82,11 @@ read -r APP_VERSION<${VERSION_FILE_DIR}/version.txt
 echo "App version: $APP_VERSION"
 echo "::set-output name=project-version::$APP_VERSION"
 
-echo "Creating debug installation package from: ${YIO_BIN}"
+echo "Creating installation package from: ${YIO_BIN}"
 
 # copy additional files for the installation archive
 cp ${VERSION_FILE_DIR}/version.txt ${YIO_BIN}/..
+cp ${GITHUB_WORKSPACE}/${PROJECT_NAME}/LICENSE ${YIO_BIN}/..
 # hooks are optional: don't fail if missing
 cp -r $SHADOW_BUILD_DIR/hooks ${YIO_BIN}/.. || :
 # compress app
