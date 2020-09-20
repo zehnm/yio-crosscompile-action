@@ -30,7 +30,7 @@ The retrieved project version from the git project.
 
 ## Example usage
 
-```
+```yml
 name: Cross Compile
 on: [push]
 env:

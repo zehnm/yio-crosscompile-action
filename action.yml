@@ -25,11 +25,7 @@ outputs:
     description: 'The version of the project'
 runs:
   using: 'docker'
-  # wtf!? GitHub package registery cannot be used to pull an image!
-  # image: 'docker://docker.pkg.github.com/zehnm/yio-crosscompile-action/yio-crosscompile:latest'
-  # https://github.community/t5/GitHub-Actions/docker-pull-from-public-GitHub-Package-Registry-fail-with-quot/td-p/32782
-  # https://github.community/t5/GitHub-Actions/Use-docker-images-from-GitHub-Package-Registry/td-p/30407
-  #image: 'Dockerfile'
+  # TODO use new GitHub Container Registry, currently in beta (Sept 2020)
   image: 'docker://zehnm/yio-crosscompile-action:latest'
   args:
     - ${{ inputs.project-name }}
