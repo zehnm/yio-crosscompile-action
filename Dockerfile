@@ -13,7 +13,7 @@ LABEL org.opencontainers.image.revision=$BUILD_REVISION
 LABEL org.opencontainers.image.title="YIO remote cross compile GitHub Action"
 LABEL org.opencontainers.image.description="GitHub action for cross compiling a YIO remote project for RPi0"
 
-ENV BUILDROOT_SDK_VERSION=v0.4.3  
+ENV BUILDROOT_SDK_VERSION=sdk2020.02.6-rc1 
 ENV BUILDROOT_SDK_BASE_URL=https://github.com/YIO-Remote/remote-os/releases/download
 ENV BUILDROOT_SDK_NAME=arm-buildroot-linux-gnueabihf_sdk-buildroot
 ENV TOOLCHAIN_PATH /opt/$BUILDROOT_SDK_NAME
