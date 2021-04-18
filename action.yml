@@ -26,7 +26,7 @@ outputs:
 runs:
   using: 'docker'
   # TODO use new GitHub Container Registry, currently in beta (Sept 2020)
-  image: 'docker://zehnm/yio-crosscompile-action:latest'
+  image: 'docker://zehnm/yio-crosscompile-action:3.0.0'
   args:
     - ${{ inputs.project-name }}
     - ${{ inputs.output-path }}
