@@ -13,8 +13,9 @@ LABEL org.opencontainers.image.revision=$BUILD_REVISION
 LABEL org.opencontainers.image.title="YIO remote cross compile GitHub Action"
 LABEL org.opencontainers.image.description="GitHub action for cross compiling a YIO remote project for RPi0"
 
-ENV BUILDROOT_SDK_VERSION=sdk2020.02.6-rc1 
+ENV BUILDROOT_SDK_VERSION=sdk-v2.0.0
 ENV BUILDROOT_SDK_BASE_URL=https://github.com/YIO-Remote/remote-os/releases/download
+ENV BUILDROOT_SDK_FILE_NAME=yio-remote-${BUILDROOT_SDK_VERSION}.tar.gz
 ENV BUILDROOT_SDK_NAME=arm-buildroot-linux-gnueabihf_sdk-buildroot
 ENV TOOLCHAIN_PATH /opt/$BUILDROOT_SDK_NAME
 
@@ -34,7 +35,7 @@ RUN apt-get update -q \
 
 # install Buildroot SDK for the YIO remote
 RUN mkdir -p /opt \
-    && wget -qO- $BUILDROOT_SDK_BASE_URL/${BUILDROOT_SDK_VERSION}/${BUILDROOT_SDK_NAME}.tar.gz | tar -xz -C /opt \
+    && wget -qO- $BUILDROOT_SDK_BASE_URL/${BUILDROOT_SDK_VERSION}/${BUILDROOT_SDK_FILE_NAME} | tar -xz -C /opt \
     && /opt/${BUILDROOT_SDK_NAME}/relocate-sdk.sh
 
 COPY entrypoint.sh /entrypoint.sh
